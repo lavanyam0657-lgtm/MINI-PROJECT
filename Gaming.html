@@ -1,0 +1,1174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameZone - Gaming Portal</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    color: white;
+    background: linear-gradient(135deg, #090018, #160b38, #071b3d);
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 4%;
+    border-bottom: 1px solid #ffffff20;
+    background: #100729aa;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #b99aff;
+}
+
+.logo span {
+    color: #45d7ff;
+}
+
+.glass {
+    background: #ffffff0d;
+    border: 1px solid #ffffff20;
+    border-radius: 18px;
+    padding: 25px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 30px #00000030;
+}
+
+.primary {
+    padding: 12px 20px;
+    border-radius: 9px;
+    color: white;
+    font-weight: bold;
+    background: linear-gradient(90deg, #813cff, #287dff);
+    transition: .2s;
+}
+
+.primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+}
+
+.secondary {
+    padding: 11px 18px;
+    border-radius: 9px;
+    color: white;
+    background: #ffffff18;
+    border: 1px solid #ffffff30;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 9px 0 16px;
+    border-radius: 9px;
+    border: 1px solid #ffffff30;
+    outline: none;
+    color: white;
+    background: #ffffff12;
+}
+
+input:focus {
+    border-color: #9c75ff;
+}
+
+input::placeholder {
+    color: #c2b8d8;
+}
+
+.auth-wrapper {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.auth-box h1 {
+    margin-bottom: 10px;
+    color: #c7aaff;
+}
+
+.auth-box p {
+    color: #c9c0dc;
+    margin-bottom: 20px;
+}
+
+.auth-box button {
+    width: 100%;
+}
+
+.switch {
+    margin-top: 18px;
+    color: #55d5ff;
+    cursor: pointer;
+}
+
+.message {
+    min-height: 22px;
+    margin: 8px 0;
+    color: #ff9bba;
+    font-size: 14px;
+}
+
+nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+nav button {
+    color: white;
+    background: transparent;
+    padding: 9px 12px;
+}
+
+nav button:hover {
+    color: #66dfff;
+}
+
+.hero {
+    padding: 45px 0 30px;
+}
+
+.hero h1 {
+    font-size: clamp(30px, 5vw, 48px);
+    margin-bottom: 12px;
+}
+
+.hero h1 span {
+    color: #a987ff;
+}
+
+.hero p {
+    color: #c7c1d8;
+    line-height: 1.6;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 25px 0 35px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat h2 {
+    font-size: 30px;
+    color: #68dfff;
+    margin-bottom: 7px;
+}
+
+.stat p {
+    color: #c7c1d8;
+}
+
+.section-title {
+    margin: 25px 0 18px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.game-card {
+    min-height: 185px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    border-color: #9d7aff;
+}
+
+.game-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.game-card h3 {
+    margin-bottom: 9px;
+}
+
+.game-card p {
+    color: #c5bdd8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.game-card button {
+    margin-top: 16px;
+}
+
+.game-area {
+    margin: 25px 0 40px;
+    text-align: center;
+}
+
+.game-area h2 {
+    color: #c4a5ff;
+    margin-bottom: 15px;
+}
+
+.game-area p {
+    color: #d0c8e2;
+    margin: 10px 0;
+}
+
+.game-content {
+    max-width: 550px;
+    margin: 20px auto;
+}
+
+.game-content button {
+    margin: 6px;
+}
+
+.game-input {
+    max-width: 250px;
+    display: block;
+    margin: 18px auto;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 90px);
+    gap: 8px;
+    justify-content: center;
+    margin: 22px auto;
+}
+
+.cell {
+    height: 90px;
+    border-radius: 12px;
+    font-size: 35px;
+    font-weight: bold;
+    color: white;
+    background: #ffffff18;
+    border: 1px solid #ffffff30;
+}
+
+.cell:hover {
+    background: #8b55ff55;
+}
+
+.choice {
+    font-size: 35px;
+    min-width: 85px;
+    min-height: 75px;
+    border-radius: 12px;
+    background: #ffffff18;
+    color: white;
+    border: 1px solid #ffffff30;
+}
+
+.choice:hover {
+    background: #7548c9;
+}
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 65px);
+    gap: 9px;
+    justify-content: center;
+    margin: 20px auto;
+}
+
+.memory-card {
+    width: 65px;
+    height: 65px;
+    font-size: 25px;
+    border-radius: 10px;
+    background: #5530a0;
+    color: white;
+}
+
+.memory-card.open {
+    background: #1685b5;
+}
+
+.quiz-option {
+    display: block;
+    width: 100%;
+    margin: 9px 0;
+    padding: 13px;
+    color: white;
+    background: #ffffff18;
+    border: 1px solid #ffffff25;
+    border-radius: 9px;
+    text-align: left;
+}
+
+.quiz-option:hover {
+    background: #7443b8;
+}
+
+.leaderboard {
+    margin: 20px 0 40px;
+}
+
+.leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard th, .leaderboard td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #ffffff20;
+}
+
+.leaderboard th {
+    color: #69dfff;
+}
+
+footer {
+    padding: 25px;
+    text-align: center;
+    color: #a99fbd;
+    border-top: 1px solid #ffffff20;
+}
+
+@media(max-width:600px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .board {
+        grid-template-columns: repeat(3, 75px);
+    }
+
+    .cell {
+        height: 75px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">GAME<span>ZONE</span></div>
+
+    <nav id="navigation" class="hidden">
+        <button onclick="showDashboard()">Home</button>
+        <button onclick="showLeaderboard()">Leaderboard</button>
+        <button onclick="logout()" class="secondary">Logout</button>
+    </nav>
+</header>
+
+<!-- LOGIN AND REGISTRATION -->
+
+<section id="authSection" class="auth-wrapper">
+    <div class="glass auth-box">
+
+        <h1 id="authTitle">Welcome to GameZone</h1>
+        <p id="authSubtitle">Login to start playing games!</p>
+
+        <div id="registerName" class="hidden">
+            <input type="text" id="nameInput" placeholder="Enter your name">
+        </div>
+
+        <input type="email" id="emailInput" placeholder="Email address">
+        <input type="password" id="passwordInput" placeholder="Password">
+
+        <button class="primary" id="authButton" onclick="authenticate()">
+            Login
+        </button>
+
+        <div class="message" id="authMessage"></div>
+
+        <div class="switch" id="switchText" onclick="toggleAuth()">
+            New user? Create an account
+        </div>
+
+    </div>
+</section>
+
+<!-- MAIN DASHBOARD -->
+
+<main id="dashboard" class="container hidden">
+
+    <section class="hero">
+        <h1>Welcome to <span>GameZone!</span></h1>
+        <p>Play exciting games, improve your skills and challenge yourself.</p>
+        <p style="margin-top:12px">Player: <strong id="playerName"></strong></p>
+    </section>
+
+    <section class="stats">
+        <div class="glass stat">
+            <h2 id="totalScore">0</h2>
+            <p>Total Points</p>
+        </div>
+
+        <div class="glass stat">
+            <h2 id="gamesPlayed">0</h2>
+            <p>Games Played</p>
+        </div>
+
+        <div class="glass stat">
+            <h2 id="bestScore">0</h2>
+            <p>Best Score</p>
+        </div>
+    </section>
+
+    <h2 class="section-title">Explore Games</h2>
+
+    <section class="games-grid">
+
+        <div class="glass game-card" onclick="openGame('tictactoe')">
+            <div class="game-icon">⭕</div>
+            <h3>Tic-Tac-Toe</h3>
+            <p>Challenge the computer in this classic game.</p>
+            <button class="primary">Play Now</button>
+        </div>
+
+        <div class="glass game-card" onclick="openGame('rps')">
+            <div class="game-icon">✊</div>
+            <h3>Rock Paper Scissors</h3>
+            <p>Test your luck against the computer.</p>
+            <button class="primary">Play Now</button>
+        </div>
+
+        <div class="glass game-card" onclick="openGame('guess')">
+            <div class="game-icon">🔢</div>
+            <h3>Number Guessing</h3>
+            <p>Guess the secret number between 1 and 100.</p>
+            <button class="primary">Play Now</button>
+        </div>
+
+        <div class="glass game-card" onclick="openGame('memory')">
+            <div class="game-icon">🧠</div>
+            <h3>Memory Cards</h3>
+            <p>Find all matching pairs of cards.</p>
+            <button class="primary">Play Now</button>
+        </div>
+
+        <div class="glass game-card" onclick="openGame('quiz')">
+            <div class="game-icon">💡</div>
+            <h3>Knowledge Quiz</h3>
+            <p>Answer questions and test your knowledge.</p>
+            <button class="primary">Play Now</button>
+        </div>
+
+    </section>
+
+    <section id="gameArea" class="glass game-area hidden">
+        <h2 id="gameTitle">Game</h2>
+        <div id="gameContent" class="game-content"></div>
+        <button class="secondary" onclick="showDashboard()">← Back to Games</button>
+    </section>
+
+    <section id="leaderboardSection" class="glass leaderboard hidden">
+        <h2 class="section-title">🏆 Leaderboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody"></tbody>
+        </table>
+    </section>
+
+</main>
+
+<footer>
+    GameZone Mini Project | Third Year CSE | 2026
+</footer>
+
+<script>
+// =====================================
+// 1. USER AUTHENTICATION
+// =====================================
+
+let isRegister = false;
+let currentUser = null;
+
+function getUsers() {
+    return JSON.parse(localStorage.getItem("gamezone_users") || "[]");
+}
+
+function saveUsers(users) {
+    localStorage.setItem("gamezone_users", JSON.stringify(users));
+}
+
+function toggleAuth() {
+    isRegister = !isRegister;
+
+    document.getElementById("authTitle").textContent =
+        isRegister ? "Create Account" : "Welcome to GameZone";
+
+    document.getElementById("authSubtitle").textContent =
+        isRegister ? "Register to join the gaming world!" : "Login to start playing games!";
+
+    document.getElementById("authButton").textContent =
+        isRegister ? "Register" : "Login";
+
+    document.getElementById("registerName").classList.toggle("hidden", !isRegister);
+
+    document.getElementById("switchText").textContent =
+        isRegister ? "Already have an account? Login" : "New user? Create an account";
+
+    document.getElementById("authMessage").textContent = "";
+}
+
+function authenticate() {
+    const email = document.getElementById("emailInput").value.trim().toLowerCase();
+    const password = document.getElementById("passwordInput").value;
+    const name = document.getElementById("nameInput").value.trim();
+    const message = document.getElementById("authMessage");
+
+    if (!email || !password) {
+        message.textContent = "Please enter your email and password.";
+        return;
+    }
+
+    if (!email.includes("@")) {
+        message.textContent = "Please enter a valid email address.";
+        return;
+    }
+
+    if (password.length < 6) {
+        message.textContent = "Password must contain at least 6 characters.";
+        return;
+    }
+
+    let users = getUsers();
+
+    if (isRegister) {
+        if (!name) {
+            message.textContent = "Please enter your name.";
+            return;
+        }
+
+        if (users.some(user => user.email === email)) {
+            message.textContent = "Account already exists. Please login.";
+            return;
+        }
+
+        users.push({
+            name: name,
+            email: email,
+            password: password,
+            score: 0,
+            games: 0
+        });
+
+        saveUsers(users);
+        message.style.color = "#7dffb0";
+        message.textContent = "Registration successful! You can now login.";
+
+        toggleAuth();
+        document.getElementById("emailInput").value = email;
+        document.getElementById("passwordInput").value = "";
+        return;
+    }
+
+    const user = users.find(
+        item => item.email === email && item.password === password
+    );
+
+    if (!user) {
+        message.textContent = "Incorrect email or password.";
+        return;
+    }
+
+    currentUser = user.email;
+    sessionStorage.setItem("gamezone_session", currentUser);
+    showDashboard();
+}
+
+function logout() {
+    sessionStorage.removeItem("gamezone_session");
+    currentUser = null;
+
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("navigation").classList.add("hidden");
+    document.getElementById("authSection").classList.remove("hidden");
+
+    document.getElementById("passwordInput").value = "";
+    document.getElementById("authMessage").textContent = "";
+    showAuthLogin();
+}
+
+function showAuthLogin() {
+    isRegister = true;
+    toggleAuth();
+}
+
+// =====================================
+// 2. DASHBOARD AND SCORE MANAGEMENT
+// =====================================
+
+function getCurrentUser() {
+    return getUsers().find(user => user.email === currentUser);
+}
+
+function updateDashboard() {
+    const user = getCurrentUser();
+    if (!user) return;
+
+    document.getElementById("playerName").textContent = user.name;
+    document.getElementById("totalScore").textContent = user.score;
+    document.getElementById("gamesPlayed").textContent = user.games;
+    document.getElementById("bestScore").textContent = user.best || 0;
+}
+
+function addScore(points) {
+    let users = getUsers();
+    let user = users.find(item => item.email === currentUser);
+
+    if (!user) return;
+
+    user.score += points;
+    user.games += 1;
+    user.best = Math.max(user.best || 0, points);
+
+    saveUsers(users);
+    updateDashboard();
+}
+
+function showDashboard() {
+    document.getElementById("authSection").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    document.getElementById("navigation").classList.remove("hidden");
+
+    document.getElementById("gameArea").classList.add("hidden");
+    document.getElementById("leaderboardSection").classList.add("hidden");
+
+    updateDashboard();
+}
+
+// =====================================
+// 3. GAME NAVIGATION
+// =====================================
+
+function openGame(game) {
+    document.getElementById("gameArea").classList.remove("hidden");
+    document.getElementById("leaderboardSection").classList.add("hidden");
+
+    const content = document.getElementById("gameContent");
+    content.replaceChildren();
+
+    const titles = {
+        tictactoe: "⭕ Tic-Tac-Toe",
+        rps: "✊ Rock Paper Scissors",
+        guess: "🔢 Number Guessing Game",
+        memory: "🧠 Memory Cards",
+        quiz: "💡 Knowledge Quiz"
+    };
+
+    document.getElementById("gameTitle").textContent = titles[game];
+
+    if (game === "tictactoe") startTicTacToe();
+    if (game === "rps") startRPS();
+    if (game === "guess") startGuess();
+    if (game === "memory") startMemory();
+    if (game === "quiz") startQuiz();
+
+    document.getElementById("gameArea").scrollIntoView({ behavior: "smooth" });
+}
+
+function addText(parent, text, tag = "p") {
+    const element = document.createElement(tag);
+    element.textContent = text;
+    parent.appendChild(element);
+    return element;
+}
+
+function addButton(parent, text, callback, className = "primary") {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.className = className;
+    button.addEventListener("click", callback);
+    parent.appendChild(button);
+    return button;
+}
+
+// =====================================
+// 4. TIC TAC TOE
+// =====================================
+
+function startTicTacToe() {
+    const content = document.getElementById("gameContent");
+
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let finished = false;
+
+    const status = addText(content, "Your turn! You are X.");
+
+    const boardElement = document.createElement("div");
+    boardElement.className = "board";
+    content.appendChild(boardElement);
+
+    const cells = [];
+
+    function checkWinner() {
+        const wins = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ];
+
+        for (const line of wins) {
+            const [a, b, c] = line;
+
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return board[a];
+            }
+        }
+
+        return board.every(cell => cell !== "") ? "Draw" : null;
+    }
+
+    function endGame(result) {
+        finished = true;
+
+        if (result === "X") {
+            status.textContent = "You win! +20 points";
+            addScore(20);
+        } else if (result === "O") {
+            status.textContent = "Computer wins! Better luck next time.";
+            addScore(0);
+        } else {
+            status.textContent = "It's a draw! +5 points";
+            addScore(5);
+        }
+
+        addButton(content, "Play Again", () => startTicTacToe());
+    }
+
+    function computerMove() {
+        const empty = board
+            .map((value, index) => value === "" ? index : -1)
+            .filter(index => index !== -1);
+
+        if (!empty.length || finished) return;
+
+        const move = empty[Math.floor(Math.random() * empty.length)];
+        board[move] = "O";
+        cells[move].textContent = "O";
+
+        const result = checkWinner();
+        if (result) {
+            endGame(result);
+        } else {
+            status.textContent = "Your turn!";
+        }
+    }
+
+    function playerMove(index) {
+        if (finished || board[index] !== "") return;
+
+        board[index] = "X";
+        cells[index].textContent = "X";
+
+        const result = checkWinner();
+        if (result) {
+            endGame(result);
+            return;
+        }
+
+        status.textContent = "Computer's turn...";
+        setTimeout(computerMove, 350);
+    }
+
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("button");
+        cell.className = "cell";
+        cell.addEventListener("click", () => playerMove(i));
+        boardElement.appendChild(cell);
+        cells.push(cell);
+    }
+}
+
+// =====================================
+// 5. ROCK PAPER SCISSORS
+// =====================================
+
+function startRPS() {
+    const content = document.getElementById("gameContent");
+
+    addText(content, "Choose your move!");
+
+    const result = addText(content, "Your result will appear here.");
+
+    const choices = ["Rock", "Paper", "Scissors"];
+    const icons = ["✊", "✋", "✌️"];
+
+    choices.forEach((choice, index) => {
+        addButton(content, icons[index] + " " + choice, () => {
+            const computer = choices[Math.floor(Math.random() * 3)];
+
+            if (choice === computer) {
+                result.textContent = "Draw! Both chose " + choice + ".";
+                addScore(5);
+            } else if (
+                (choice === "Rock" && computer === "Scissors") ||
+                (choice === "Paper" && computer === "Rock") ||
+                (choice === "Scissors" && computer === "Paper")
+            ) {
+                result.textContent = "You win! Computer chose " + computer + ". +10 points";
+                addScore(10);
+            } else {
+                result.textContent = "Computer wins! It chose " + computer + ".";
+                addScore(0);
+            }
+        }, "choice");
+    });
+
+    addText(content, "Rock beats Scissors | Paper beats Rock | Scissors beats Paper");
+}
+
+// =====================================
+// 6. NUMBER GUESSING GAME
+// =====================================
+
+function startGuess() {
+    const content = document.getElementById("gameContent");
+
+    const secret = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    let finished = false;
+
+    addText(content, "Guess a number between 1 and 100!");
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "1";
+    input.max = "100";
+    input.placeholder = "Enter your guess";
+    input.className = "game-input";
+    content.appendChild(input);
+
+    const result = addText(content, "You have 7 attempts.");
+    const submit = addButton(content, "Check Number", checkGuess);
+
+    function checkGuess() {
+        if (finished) return;
+
+        const guess = Number(input.value);
+
+        if (!input.value || !Number.isInteger(guess) || guess < 1 || guess > 100) {
+            result.textContent = "Enter a valid whole number between 1 and 100.";
+            return;
+        }
+
+        attempts++;
+
+        if (guess === secret) {
+            const points = Math.max(5, 50 - (attempts - 1) * 6);
+            result.textContent = "Correct! You won " + points + " points in " + attempts + " attempts.";
+            addScore(points);
+            finished = true;
+            submit.disabled = true;
+            addButton(content, "Play Again", () => startGuess());
+        } else if (attempts >= 7) {
+            result.textContent = "Game over! The number was " + secret + ".";
+            finished = true;
+            submit.disabled = true;
+            addScore(0);
+            addButton(content, "Try Again", () => startGuess());
+        } else {
+            result.textContent =
+                (guess < secret ? "Too low!" : "Too high!") +
+                " Attempts remaining: " + (7 - attempts);
+        }
+
+        input.value = "";
+    }
+
+    input.addEventListener("keydown", event => {
+        if (event.key === "Enter") checkGuess();
+    });
+}
+
+// =====================================
+// 7. MEMORY CARD GAME
+// =====================================
+
+function startMemory() {
+    const content = document.getElementById("gameContent");
+
+    const symbols = ["🍎", "🚀", "⭐", "🎮", "🎵", "🐱", "🍕", "⚽"];
+    const cards = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+
+    let first = null;
+    let second = null;
+    let lock = false;
+    let matches = 0;
+    let moves = 0;
+
+    const status = addText(content, "Find all matching pairs!");
+    const moveText = addText(content, "Moves: 0");
+
+    const grid = document.createElement("div");
+    grid.className = "memory-grid";
+    content.appendChild(grid);
+
+    cards.forEach((symbol, index) => {
+        const card = document.createElement("button");
+        card.className = "memory-card";
+        card.textContent = "?";
+
+        card.addEventListener("click", () => {
+            if (lock || card.classList.contains("open") || card.disabled) return;
+
+            card.textContent = symbol;
+            card.classList.add("open");
+
+            if (!first) {
+                first = card;
+                return;
+            }
+
+            second = card;
+            moves++;
+            moveText.textContent = "Moves: " + moves;
+
+            if (first.textContent === second.textContent) {
+                first.disabled = true;
+                second.disabled = true;
+                first = null;
+                second = null;
+                matches++;
+
+                if (matches === symbols.length) {
+                    status.textContent = "Excellent! You matched all pairs. +30 points";
+                    addScore(30);
+                }
+            } else {
+                lock = true;
+
+                setTimeout(() => {
+                    first.textContent = "?";
+                    second.textContent = "?";
+                    first.classList.remove("open");
+                    second.classList.remove("open");
+                    first = null;
+                    second = null;
+                    lock = false;
+                }, 750);
+            }
+        });
+
+        grid.appendChild(card);
+    });
+
+    addButton(content, "Restart Game", () => startMemory());
+}
+
+// =====================================
+// 8. KNOWLEDGE QUIZ
+// =====================================
+
+function startQuiz() {
+    const content = document.getElementById("gameContent");
+
+    const questions = [
+        {
+            q: "Which language is used to structure web pages?",
+            options: ["Python", "HTML", "Java", "C"],
+            answer: 1
+        },
+        {
+            q: "What does CPU stand for?",
+            options: [
+                "Central Processing Unit",
+                "Computer Personal Unit",
+                "Central Program Utility",
+                "Control Processing User"
+            ],
+            answer: 0
+        },
+        {
+            q: "Which data structure follows FIFO?",
+            options: ["Stack", "Tree", "Queue", "Graph"],
+            answer: 2
+        },
+        {
+            q: "Which language is mainly used for styling web pages?",
+            options: ["CSS", "SQL", "C++", "Python"],
+            answer: 0
+        },
+        {
+            q: "What is the full form of DBMS?",
+            options: [
+                "Data Basic Management System",
+                "Database Management System",
+                "Digital Base Management Software",
+                "Data Backup Management System"
+            ],
+            answer: 1
+        }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    const question = addText(content, "", "h3");
+    const optionsBox = document.createElement("div");
+    content.appendChild(optionsBox);
+
+    const feedback = addText(content, "");
+
+    const nextButton = addButton(content, "Next Question", nextQuestion);
+    nextButton.classList.add("hidden");
+
+    function showQuestion() {
+        answered = false;
+        feedback.textContent = "";
+        nextButton.classList.add("hidden");
+        optionsBox.replaceChildren();
+
+        question.textContent =
+            "Question " + (current + 1) + " of " + questions.length +
+            ": " + questions[current].q;
+
+        questions[current].options.forEach((option, index) => {
+            addButton(optionsBox, option, () => chooseAnswer(index), "quiz-option");
+        });
+    }
+
+    function chooseAnswer(index) {
+        if (answered) return;
+        answered = true;
+
+        if (index === questions[current].answer) {
+            score++;
+            feedback.textContent = "Correct answer!";
+        } else {
+            feedback.textContent =
+                "Incorrect! Correct answer: " +
+                questions[current].options[questions[current].answer];
+        }
+
+        nextButton.classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+        current++;
+
+        if (current < questions.length) {
+            showQuestion();
+        } else {
+            const points = score * 10;
+            question.textContent = "Quiz Completed!";
+            optionsBox.replaceChildren();
+            feedback.textContent =
+                "Your score: " + score + "/" + questions.length +
+                ". You earned " + points + " points!";
+
+            nextButton.classList.add("hidden");
+            addScore(points);
+            addButton(content, "Play Again", () => startQuiz());
+        }
+    }
+
+    showQuestion();
+}
+
+// =====================================
+// 9. LEADERBOARD
+// =====================================
+
+function showLeaderboard() {
+    document.getElementById("gameArea").classList.add("hidden");
+    document.getElementById("leaderboardSection").classList.remove("hidden");
+
+    const users = getUsers().sort((a, b) => b.score - a.score);
+    const body = document.getElementById("leaderboardBody");
+
+    body.replaceChildren();
+
+    if (users.length === 0) {
+        const row = body.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 3;
+        cell.textContent = "No players yet.";
+        return;
+    }
+
+    users.forEach((user, index) => {
+        const row = body.insertRow();
+
+        row.insertCell().textContent = index + 1;
+        row.insertCell().textContent = user.name;
+        row.insertCell().textContent = user.score;
+    });
+}
+
+// =====================================
+// 10. RESTORE LOGIN SESSION
+// =====================================
+
+window.addEventListener("load", () => {
+    const savedSession = sessionStorage.getItem("gamezone_session");
+
+    if (savedSession && getUsers().some(user => user.email === savedSession)) {
+        currentUser = savedSession;
+        showDashboard();
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1492 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Electricity Consumption Predictor</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg,#0b1025,#171b43,#251044);
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+button {
+    background: #8055ed;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s;
+}
+
+button:hover {
+    background: #6237d1;
+    transform: translateY(-1px);
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 9px 0;
+    background: #211b3d;
+    color: white;
+    border: 1px solid #57467c;
+    border-radius: 8px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #a78bfa;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+.auth {
+    width: 380px;
+    max-width: 92%;
+    margin: 75px auto;
+    padding: 30px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid #62508d;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px #08051c;
+    text-align: center;
+}
+
+.auth h1 {
+    color: #c5a5ff;
+    margin-bottom: 12px;
+}
+
+.auth p {
+    color: #ccc;
+    margin: 15px 0;
+}
+
+.auth a {
+    color: #c5a5ff;
+    cursor: pointer;
+}
+
+.message {
+    min-height: 20px;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+header {
+    background: rgba(9,8,30,.9);
+    padding: 18px 5%;
+    border-bottom: 1px solid #514477;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h2 {
+    color: #c5a5ff;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.container {
+    padding: 30px 5%;
+    max-width: 1450px;
+    margin: auto;
+}
+
+.welcome {
+    margin-bottom: 25px;
+}
+
+.welcome h1 {
+    font-size: 29px;
+    margin-bottom: 8px;
+}
+
+.welcome p, .muted {
+    color: #b8b5ca;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card, .panel {
+    background: rgba(255,255,255,.07);
+    border: 1px solid #504273;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 7px 22px rgba(0,0,0,.2);
+}
+
+.stat-card h3 {
+    color: #bca5ff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stat-card h1 {
+    font-size: 29px;
+    margin-top: 12px;
+}
+
+.stat-card small {
+    color: #aaa;
+}
+
+.panel {
+    margin-bottom: 24px;
+}
+
+.panel h2 {
+    color: #c5a5ff;
+    margin-bottom: 18px;
+    font-size: 20px;
+}
+
+.panel p {
+    color: #c4c0d4;
+    line-height: 1.6;
+}
+
+.grid-two {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+    gap: 12px;
+}
+
+label {
+    display: block;
+    color: #c9c2df;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 570px;
+}
+
+th, td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #514477;
+}
+
+th {
+    color: #c5a5ff;
+    background: #211b3d;
+}
+
+.available {
+    color: #63e8a0;
+}
+
+.warning {
+    color: #ffbe72;
+}
+
+.delete {
+    background: #d94c65;
+    padding: 7px 12px;
+}
+
+.prediction-box {
+    background: linear-gradient(135deg,#4930a1,#244a9e);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.prediction-box h1 {
+    font-size: 34px;
+    margin: 12px 0;
+}
+
+.progress {
+    width: 100%;
+    height: 12px;
+    background: #292447;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg,#8055ed,#44d6d1);
+    width: 0%;
+    border-radius: 20px;
+}
+
+canvas {
+    width: 100%;
+    height: 260px;
+    display: block;
+}
+
+.tip {
+    padding: 14px;
+    margin: 10px 0;
+    border-left: 3px solid #9b7bff;
+    background: rgba(255,255,255,.05);
+    border-radius: 6px;
+}
+
+footer {
+    padding: 25px;
+    text-align: center;
+    color: #aaa;
+}
+
+.small-btn {
+    padding: 8px 13px;
+    font-size: 13px;
+}
+
+@media(max-width:750px) {
+    .grid-two {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        flex-direction: column;
+    }
+
+    .container {
+        padding: 20px 4%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+
+<div id="loginPage" class="auth">
+
+    <h1>⚡ Smart Energy</h1>
+    <p>Electricity Consumption Predictor</p>
+
+    <form id="loginForm">
+
+        <input type="email" id="loginEmail"
+        placeholder="Enter email address" required>
+
+        <input type="password" id="loginPassword"
+        placeholder="Enter password" required>
+
+        <button type="submit" style="width:100%">
+            Login
+        </button>
+
+    </form>
+
+    <div id="loginMessage" class="message"></div>
+
+    <p>Don't have an account?
+        <a onclick="showRegister()">Create Account</a>
+    </p>
+
+</div>
+
+
+<!-- REGISTRATION PAGE -->
+
+<div id="registerPage" class="auth hidden">
+
+    <h1>Create Account</h1>
+    <p>Join Smart Energy Predictor</p>
+
+    <form id="registerForm">
+
+        <input type="text" id="regName"
+        placeholder="Full Name" required>
+
+        <input type="email" id="regEmail"
+        placeholder="Email Address" required>
+
+        <input type="password" id="regPassword"
+        placeholder="Create Password (minimum 6 characters)"
+        minlength="6" required>
+
+        <input type="password" id="confirmPassword"
+        placeholder="Confirm Password" required>
+
+        <button type="submit" style="width:100%">
+            Register
+        </button>
+
+    </form>
+
+    <div id="registerMessage" class="message"></div>
+
+    <p>Already have an account?
+        <a onclick="showLogin()">Login</a>
+    </p>
+
+</div>
+
+
+<!-- MAIN DASHBOARD -->
+
+<div id="dashboard" class="hidden">
+
+<header>
+
+    <h2>⚡ Smart Energy Predictor</h2>
+
+    <div class="header-right">
+        <span id="userName"></span>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="welcome">
+
+        <h1>Electricity Dashboard</h1>
+
+        <p>Monitor, analyze and predict your electricity consumption.</p>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h3>Total Recorded Units</h3>
+            <h1 id="totalUnits">0</h1>
+            <small>kWh</small>
+        </div>
+
+        <div class="stat-card">
+            <h3>Today's Consumption</h3>
+            <h1 id="todayUnits">0</h1>
+            <small>kWh</small>
+        </div>
+
+        <div class="stat-card">
+            <h3>Predicted Monthly Usage</h3>
+            <h1 id="predictedUnits">0</h1>
+            <small>kWh</small>
+        </div>
+
+        <div class="stat-card">
+            <h3>Estimated Monthly Bill</h3>
+            <h1 id="estimatedBill">₹0</h1>
+            <small>Estimated amount</small>
+        </div>
+
+    </div>
+
+
+    <!-- ADD CONSUMPTION -->
+
+    <div class="panel">
+
+        <h2>➕ Record Electricity Consumption</h2>
+
+        <p>Enter your daily electricity consumption in units (kWh).</p>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Date</label>
+                <input type="date" id="readingDate">
+            </div>
+
+            <div>
+                <label>Electricity Units (kWh)</label>
+                <input type="number" id="units"
+                placeholder="Example: 12" min="0.01" step="0.01">
+            </div>
+
+            <div>
+                <label>Number of Appliances</label>
+                <input type="number" id="appliances"
+                placeholder="Example: 5" min="1" step="1">
+            </div>
+
+            <div>
+                <label>Daily Usage Hours</label>
+                <input type="number" id="hours"
+                placeholder="Example: 8" min="0" max="24" step="0.5">
+            </div>
+
+        </div>
+
+        <button onclick="addReading()">Save Consumption</button>
+
+    </div>
+
+
+    <!-- PREDICTION -->
+
+    <div class="grid-two">
+
+        <div class="panel">
+
+            <h2>🔮 Electricity Prediction</h2>
+
+            <p>
+                The system calculates estimated monthly usage
+                using your recent recorded consumption.
+            </p>
+
+            <div class="prediction-box">
+
+                <small>Predicted Monthly Consumption</small>
+
+                <h1 id="predictionValue">0 kWh</h1>
+
+                <p id="predictionText">
+                    Add consumption records to generate a prediction.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>💰 Electricity Bill Estimator</h2>
+
+            <p>Estimated bill based on the sample tariff configured in this demo.</p>
+
+            <div class="prediction-box">
+
+                <small>Estimated Monthly Bill</small>
+
+                <h1 id="billValue">₹0</h1>
+
+                <p id="tariffText">Sample tariff: ₹7.50 per unit</p>
+
+            </div>
+
+            <p style="margin-top:15px;font-size:12px">
+                Actual electricity bills may differ based on your electricity
+                provider, slab rates, fixed charges and taxes.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- GRAPH -->
+
+    <div class="panel">
+
+        <h2>📊 Electricity Consumption Graph</h2>
+
+        <p>Recent recorded daily consumption in kWh.</p>
+
+        <canvas id="consumptionChart"></canvas>
+
+    </div>
+
+
+    <!-- MONTHLY ANALYSIS -->
+
+    <div class="panel">
+
+        <h2>📈 Monthly Consumption Analysis</h2>
+
+        <canvas id="monthlyChart"></canvas>
+
+    </div>
+
+
+    <!-- ENERGY SAVING TIPS -->
+
+    <div class="panel">
+
+        <h2>🌱 Smart Energy Saving Recommendations</h2>
+
+        <div id="energyTips">
+
+            <div class="tip">
+                Switch off electrical appliances when not in use.
+            </div>
+
+            <div class="tip">
+                Use LED lights to reduce electricity consumption.
+            </div>
+
+            <div class="tip">
+                Avoid unnecessary use of air conditioners.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="panel">
+
+        <h2>📋 Consumption History</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Units (kWh)</th>
+                        <th>Appliances</th>
+                        <th>Hours</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="historyTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    Smart Electricity Consumption Predictor |
+    CSE Mini Project
+</footer>
+
+</div>
+
+
+<script>
+
+// ====================================
+// STORAGE MANAGEMENT
+// ====================================
+
+function readStorage(key, fallback) {
+
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+
+        return data === null ? fallback : data;
+
+    } catch {
+        return fallback;
+    }
+
+}
+
+let users = readStorage("energyUsers", []);
+
+let readings = readStorage("energyReadings", []);
+
+let currentUser = null;
+
+let tariff = 7.50;
+
+
+// ====================================
+// HELPER FUNCTIONS
+// ====================================
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function saveUsers() {
+    localStorage.setItem("energyUsers", JSON.stringify(users));
+}
+
+function saveReadings() {
+    localStorage.setItem("energyReadings", JSON.stringify(readings));
+}
+
+function getUserReadings() {
+
+    if (!currentUser) return [];
+
+    return readings
+        .filter(r => r.email === currentUser.email)
+        .sort((a,b) => a.date.localeCompare(b.date));
+
+}
+
+function showMessage(id, message, color) {
+
+    $(id).textContent = message;
+    $(id).style.color = color || "#ff7777";
+
+}
+
+
+// ====================================
+// PAGE NAVIGATION
+// ====================================
+
+function showRegister() {
+
+    $("loginPage").classList.add("hidden");
+    $("registerPage").classList.remove("hidden");
+
+    $("loginMessage").textContent = "";
+
+}
+
+function showLogin() {
+
+    $("registerPage").classList.add("hidden");
+    $("loginPage").classList.remove("hidden");
+
+    $("registerMessage").textContent = "";
+
+}
+
+
+// ====================================
+// REGISTRATION
+// ====================================
+
+$("registerForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const name = $("regName").value.trim();
+
+    const email = $("regEmail").value.trim().toLowerCase();
+
+    const password = $("regPassword").value;
+
+    const confirm = $("confirmPassword").value;
+
+    if (!name || !email || !password || !confirm) {
+
+        showMessage("registerMessage","Please fill all fields.");
+        return;
+
+    }
+
+    if (password.length < 6) {
+
+        showMessage(
+            "registerMessage",
+            "Password must contain at least 6 characters."
+        );
+
+        return;
+
+    }
+
+    if (password !== confirm) {
+
+        showMessage(
+            "registerMessage",
+            "Passwords do not match!"
+        );
+
+        return;
+
+    }
+
+    if (users.some(u => u.email === email)) {
+
+        showMessage(
+            "registerMessage",
+            "Email already registered. Please login."
+        );
+
+        return;
+
+    }
+
+    users.push({
+        name: name,
+        email: email,
+        password: password
+    });
+
+    saveUsers();
+
+    showMessage(
+        "registerMessage",
+        "Registration successful! Please login.",
+        "#65f5a0"
+    );
+
+    $("registerForm").reset();
+
+    setTimeout(showLogin,1200);
+
+});
+
+
+// ====================================
+// LOGIN
+// ====================================
+
+$("loginForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const email = $("loginEmail").value.trim().toLowerCase();
+
+    const password = $("loginPassword").value;
+
+    const user = users.find(u =>
+        u.email === email &&
+        u.password === password
+    );
+
+    if (!user) {
+
+        showMessage(
+            "loginMessage",
+            "Invalid email or password. Register first."
+        );
+
+        return;
+
+    }
+
+    currentUser = {
+        name: user.name,
+        email: user.email
+    };
+
+    sessionStorage.setItem(
+        "energySession",
+        JSON.stringify(currentUser)
+    );
+
+    $("loginForm").reset();
+
+    openDashboard();
+
+});
+
+
+// ====================================
+// DASHBOARD
+// ====================================
+
+function openDashboard() {
+
+    if (!currentUser) return;
+
+    $("loginPage").classList.add("hidden");
+
+    $("registerPage").classList.add("hidden");
+
+    $("dashboard").classList.remove("hidden");
+
+    $("userName").textContent =
+        "Welcome, " + currentUser.name;
+
+    $("readingDate").value =
+        new Date().toISOString().slice(0,10);
+
+    updateDashboard();
+
+}
+
+
+// ====================================
+// ADD ELECTRICITY READING
+// ====================================
+
+function addReading() {
+
+    const date = $("readingDate").value;
+
+    const units = Number($("units").value);
+
+    const appliances = Number($("appliances").value);
+
+    const hours = Number($("hours").value);
+
+    if (!date || !Number.isFinite(units) ||
+        !Number.isInteger(appliances) ||
+        !Number.isFinite(hours)) {
+
+        alert("Please enter all consumption details correctly.");
+        return;
+
+    }
+
+    if (date > new Date().toISOString().slice(0,10)) {
+
+        alert("Future dates cannot be recorded.");
+        return;
+
+    }
+
+    if (units <= 0 || appliances < 1 ||
+        hours < 0 || hours > 24) {
+
+        alert("Please enter valid positive values.");
+        return;
+
+    }
+
+    readings.push({
+
+        id: Date.now(),
+
+        email: currentUser.email,
+
+        date: date,
+
+        units: units,
+
+        appliances: appliances,
+
+        hours: hours
+
+    });
+
+    saveReadings();
+
+    $("units").value = "";
+    $("appliances").value = "";
+    $("hours").value = "";
+
+    updateDashboard();
+
+    alert("Electricity consumption saved successfully!");
+
+}
+
+
+// ====================================
+// PREDICTION ALGORITHM
+// ====================================
+
+function predictConsumption() {
+
+    const data = getUserReadings();
+
+    if (data.length === 0) {
+
+        return {
+            daily: 0,
+            monthly: 0,
+            average: 0
+        };
+
+    }
+
+    // Use the latest 7 records
+
+    const recent = data.slice(-7);
+
+    const total = recent.reduce(
+        (sum,r) => sum + r.units,0
+    );
+
+    const average = total / recent.length;
+
+    // Estimated monthly consumption
+
+    const monthly = average * 30;
+
+    return {
+        daily: average,
+        monthly: monthly,
+        average: average
+    };
+
+}
+
+
+// ====================================
+// BILL CALCULATION
+// ====================================
+
+function calculateBill(units) {
+
+    // Illustrative flat tariff for demonstration
+
+    return units * tariff;
+
+}
+
+
+// ====================================
+// UPDATE DASHBOARD
+// ====================================
+
+function updateDashboard() {
+
+    const data = getUserReadings();
+
+    const total = data.reduce(
+        (sum,r) => sum + r.units,0
+    );
+
+    const today = new Date().toISOString().slice(0,10);
+
+    const todayTotal = data
+        .filter(r => r.date === today)
+        .reduce((sum,r) => sum + r.units,0);
+
+    const prediction = predictConsumption();
+
+    const bill = calculateBill(prediction.monthly);
+
+    $("totalUnits").textContent = total.toFixed(2);
+
+    $("todayUnits").textContent = todayTotal.toFixed(2);
+
+    $("predictedUnits").textContent =
+        prediction.monthly.toFixed(2);
+
+    $("estimatedBill").textContent =
+        "₹" + bill.toFixed(2);
+
+    $("predictionValue").textContent =
+        prediction.monthly.toFixed(2) + " kWh";
+
+    $("billValue").textContent =
+        "₹" + bill.toFixed(2);
+
+    if (data.length === 0) {
+
+        $("predictionText").textContent =
+            "Add consumption records to generate a prediction.";
+
+    } else {
+
+        $("predictionText").textContent =
+            "Based on average daily usage of " +
+            prediction.average.toFixed(2) + " kWh.";
+
+    }
+
+    displayHistory();
+
+    drawDailyChart();
+
+    drawMonthlyChart();
+
+    generateTips(data,prediction);
+
+}
+
+
+// ====================================
+// DISPLAY HISTORY
+// ====================================
+
+function displayHistory() {
+
+    const table = $("historyTable");
+
+    table.innerHTML = "";
+
+    const data = getUserReadings().slice().reverse();
+
+    if (data.length === 0) {
+
+        table.innerHTML =
+            "<tr><td colspan='5'>No consumption records available.</td></tr>";
+
+        return;
+
+    }
+
+    data.forEach(r => {
+
+        const row = document.createElement("tr");
+
+        const values = [
+            r.date,
+            r.units.toFixed(2),
+            r.appliances,
+            r.hours
+        ];
+
+        values.forEach(value => {
+
+            const cell = document.createElement("td");
+
+            cell.textContent = value;
+
+            row.appendChild(cell);
+
+        });
+
+        const action = document.createElement("td");
+
+        const btn = document.createElement("button");
+
+        btn.textContent = "Delete";
+
+        btn.className = "delete small-btn";
+
+        btn.onclick = () => deleteReading(r.id);
+
+        action.appendChild(btn);
+
+        row.appendChild(action);
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+// ====================================
+// DELETE READING
+// ====================================
+
+function deleteReading(id) {
+
+    if (!confirm("Delete this consumption record?")) return;
+
+    readings = readings.filter(r =>
+
+        !(r.id === id && r.email === currentUser.email)
+
+    );
+
+    saveReadings();
+
+    updateDashboard();
+
+}
+
+
+// ====================================
+// DAILY CONSUMPTION GRAPH
+// ====================================
+
+function drawDailyChart() {
+
+    const canvas = $("consumptionChart");
+
+    const ctx = canvas.getContext("2d");
+
+    const data = getUserReadings().slice(-7);
+
+    const width = canvas.clientWidth;
+
+    const height = 260;
+
+    const ratio = window.devicePixelRatio || 1;
+
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+
+    ctx.scale(ratio,ratio);
+
+    ctx.clearRect(0,0,width,height);
+
+    if (data.length === 0) {
+
+        ctx.fillStyle = "#c5a5ff";
+
+        ctx.font = "15px Arial";
+
+        ctx.fillText(
+            "Add records to view the consumption graph.",
+            15,120
+        );
+
+        return;
+
+    }
+
+    const max = Math.max(
+        5,
+        ...data.map(r => r.units)
+    ) * 1.2;
+
+    const left = 40;
+    const bottom = 210;
+    const chartHeight = 165;
+    const chartWidth = width - 65;
+
+    // Grid lines
+
+    ctx.strokeStyle = "#514477";
+    ctx.lineWidth = 1;
+
+    for(let i=0;i<=4;i++) {
+
+        const y = bottom - (i/4)*chartHeight;
+
+        ctx.beginPath();
+        ctx.moveTo(left,y);
+        ctx.lineTo(width-10,y);
+        ctx.stroke();
+
+        ctx.fillStyle = "#aaa";
+        ctx.font = "11px Arial";
+
+        ctx.fillText(
+            (max*i/4).toFixed(0),
+            5,y+4
+        );
+
+    }
+
+    const step = chartWidth / data.length;
+
+    // Draw line
+
+    ctx.beginPath();
+
+    data.forEach((r,i) => {
+
+        const x = left + step*i + step/2;
+
+        const y = bottom - (r.units/max)*chartHeight;
+
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+
+    });
+
+    ctx.strokeStyle = "#a78bfa";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Draw points
+
+    data.forEach((r,i) => {
+
+        const x = left + step*i + step/2;
+
+        const y = bottom - (r.units/max)*chartHeight;
+
+        ctx.beginPath();
+        ctx.arc(x,y,5,0,Math.PI*2);
+
+        ctx.fillStyle = "#49ddd0";
+        ctx.fill();
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "11px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            r.units.toFixed(1),
+            x,y-12
+        );
+
+        ctx.fillStyle = "#aaa";
+
+        ctx.fillText(
+            r.date.slice(5),
+            x,235
+        );
+
+    });
+
+}
+
+
+// ====================================
+// MONTHLY GRAPH
+// ====================================
+
+function drawMonthlyChart() {
+
+    const canvas = $("monthlyChart");
+
+    const ctx = canvas.getContext("2d");
+
+    const data = getUserReadings();
+
+    const months = {};
+
+    data.forEach(r => {
+
+        const month = r.date.slice(0,7);
+
+        months[month] = (months[month] || 0) + r.units;
+
+    });
+
+    const entries = Object.entries(months).slice(-6);
+
+    const width = canvas.clientWidth;
+
+    const height = 260;
+
+    const ratio = window.devicePixelRatio || 1;
+
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+
+    ctx.scale(ratio,ratio);
+
+    ctx.clearRect(0,0,width,height);
+
+    if(entries.length === 0) {
+
+        ctx.fillStyle = "#c5a5ff";
+        ctx.font = "15px Arial";
+
+        ctx.fillText(
+            "Monthly analysis will appear here.",
+            15,120
+        );
+
+        return;
+
+    }
+
+    const max = Math.max(
+        5,
+        ...entries.map(e => e[1])
+    ) * 1.2;
+
+    const left = 40;
+    const bottom = 210;
+    const chartHeight = 165;
+    const chartWidth = width - 60;
+
+    const step = chartWidth / entries.length;
+
+    for(let i=0;i<=4;i++) {
+
+        const y = bottom - (i/4)*chartHeight;
+
+        ctx.beginPath();
+        ctx.moveTo(left,y);
+        ctx.lineTo(width-10,y);
+
+        ctx.strokeStyle = "#514477";
+        ctx.stroke();
+
+    }
+
+    entries.forEach((entry,i) => {
+
+        const barHeight = (entry[1]/max)*chartHeight;
+
+        const x = left + i*step + step*0.2;
+
+        const barWidth = step*0.6;
+
+        const y = bottom-barHeight;
+
+        ctx.fillStyle = "#8055ed";
+
+        ctx.fillRect(x,y,barWidth,barHeight);
+
+        ctx.fillStyle = "#fff";
+
+        ctx.font = "11px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            entry[1].toFixed(1),
+            x+barWidth/2,
+            y-7
+        );
+
+        ctx.fillStyle = "#aaa";
+
+        ctx.fillText(
+            entry[0],
+            x+barWidth/2,
+            235
+        );
+
+    });
+
+}
+
+
+// ====================================
+// ENERGY SAVING TIPS
+// ====================================
+
+function generateTips(data,prediction) {
+
+    const container = $("energyTips");
+
+    let tips = [];
+
+    if(data.length === 0) {
+
+        tips = [
+            "Switch off lights and fans when not in use.",
+            "Use energy-efficient LED bulbs.",
+            "Avoid keeping appliances on standby."
+        ];
+
+    } else {
+
+        const avgAppliances = data.reduce(
+            (sum,r) => sum+r.appliances,0
+        ) / data.length;
+
+        if(prediction.average > 15) {
+
+            tips.push(
+                "Your daily consumption is high. Check appliances that consume more electricity."
+            );
+
+        } else {
+
+            tips.push(
+                "Your recorded average consumption is relatively moderate. Continue monitoring it."
+            );
+
+        }
+
+        if(avgAppliances > 6) {
+
+            tips.push(
+                "Try reducing unnecessary simultaneous appliance usage."
+            );
+
+        }
+
+        tips.push(
+            "Use natural daylight whenever possible."
+        );
+
+        tips.push(
+            "Choose energy-efficient appliances with good star ratings."
+        );
+
+        tips.push(
+            "Switch off chargers and electronic devices when not needed."
+        );
+
+    }
+
+    container.innerHTML = "";
+
+    tips.forEach(tip => {
+
+        const div = document.createElement("div");
+
+        div.className = "tip";
+
+        div.textContent = "💡 " + tip;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+// ====================================
+// LOGOUT
+// ====================================
+
+function logout() {
+
+    sessionStorage.removeItem("energySession");
+
+    currentUser = null;
+
+    $("dashboard").classList.add("hidden");
+
+    $("loginPage").classList.remove("hidden");
+
+    $("loginForm").reset();
+
+    showMessage(
+        "loginMessage",
+        "Logged out successfully.",
+        "#65f5a0"
+    );
+
+}
+
+
+// ====================================
+// INITIALIZATION
+// ====================================
+
+window.addEventListener("resize",function() {
+
+    if(currentUser &&
+       !$("dashboard").classList.contains("hidden")) {
+
+        drawDailyChart();
+        drawMonthlyChart();
+
+    }
+
+});
+
+const savedSession = readStorage("energySession",null);
+
+if(savedSession &&
+   users.some(u => u.email === savedSession.email)) {
+
+    currentUser = savedSession;
+
+    openDashboard();
+
+} else {
+
+    sessionStorage.removeItem("energySession");
+
+    $("loginPage").classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
